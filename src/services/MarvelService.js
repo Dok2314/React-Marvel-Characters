@@ -24,9 +24,15 @@ class MarvelService
     }
 
     _transformCharacter = (character) => {
+        const description = character.description
+            ? character.description.length > 50
+                ? character.description.slice(0, 150) + '...'
+                : character.description
+            : 'Description not available';
+
         return {
             name: character.name,
-            description: character.description,
+            description: description,
             thumbnail: `${character.thumbnail.path}.${character.thumbnail.extension}`,
             homepage: character.urls[0].url,
             wiki: character.urls[1].url,
