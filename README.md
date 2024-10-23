@@ -24,7 +24,7 @@ This is a React-based application that interacts with the Marvel API to display 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/marvel-characters-app.git
+   [git clone https://github.com/yourusername/marvel-characters-app.git](https://github.com/Dok2314/React-Marvel-Characters.git)
    
 2.
   ```bash
