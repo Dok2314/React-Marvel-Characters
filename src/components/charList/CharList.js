@@ -10,25 +10,43 @@ class CharList extends Component
         characters: [],
         loading: true,
         error: false,
+        newItemLoading: false,
+        offset: 210,
+        charEnded: false,
+        charCount: 0,
     }
 
     marvelService = new MarvelService();
 
     componentDidMount() {
-        this.updateChars();
+        this.onRequestChars();
     }
 
-    updateChars = () => {
-        this.marvelService.getAllCharacters()
+    onRequestChars = (offset) => {
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(offset)
             .then(this.onCharactersLoaded)
             .catch(this.onError);
     }
 
-    onCharactersLoaded = (characters) => {
-        this.setState({
-            characters,
-            loading: false
-        });
+    onCharListLoading = () => {
+        this.setState({newItemLoading: true});
+    }
+
+    onCharactersLoaded = (newCharacters) => {
+        let ended = false;
+        if (newCharacters.length < 9) {
+            ended = true;
+        }
+
+        this.setState(({offset, characters, charCount}) => ({
+            characters: [...characters, ...newCharacters],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9,
+            charEnded: ended,
+            charCount: charCount + 9,
+        }));
     }
 
     onError = () => {
@@ -43,7 +61,7 @@ class CharList extends Component
     }
 
     render() {
-        const {characters, loading, error} = this.state;
+        const {characters, loading, error, offset, newItemLoading, charEnded, charCount} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <Characters characters={characters} setCharId={this.setCharId} /> : null;
@@ -53,7 +71,16 @@ class CharList extends Component
                 {spinner}
                 {content}
                 {errorMessage}
-                <button className="button button__main button__long">
+                <div className='char__counter'>
+                    <div className="inner">Characters: {charCount}</div>
+                    <div className="inner">Total: {localStorage.getItem('totalCharacters')}</div>
+                </div>
+                <button
+                    className="button button__main button__long"
+                    onClick={() => this.onRequestChars(offset)}
+                    disabled={newItemLoading}
+                    style={{'display': charEnded ? 'none' : 'block'}}
+                >
                     <div className="inner">load more</div>
                 </button>
             </div>
