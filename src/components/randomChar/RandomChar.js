@@ -4,7 +4,6 @@ import mjolnir from '../../resources/img/mjolnir.png';
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import MarvelService from "../../services/MarvelService";
-import {info} from "sass";
 
 class RandomChar extends Component
 {
@@ -41,10 +40,17 @@ class RandomChar extends Component
 
     updateChar = () => {
         const randomId = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        this.onCharLoading();
         this.marvelService
             .getCharacter(randomId)
             .then(this.onCharacterLoaded)
             .catch(this.onError);
+    }
+
+    onCharLoading = () => {
+        this.setState({
+            loading: true
+        });
     }
 
     render() {
@@ -69,7 +75,10 @@ class RandomChar extends Component
                         Or choose another one
                     </p>
                     <button className="button button__main">
-                        <div className="inner">try it</div>
+                        <div
+                            className="inner"
+                            onClick={this.updateChar}
+                        >try it</div>
                     </button>
                     <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
                 </div>

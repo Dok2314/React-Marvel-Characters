@@ -10,8 +10,6 @@ class CharList extends Component
         characters: [],
         loading: true,
         error: false,
-        limit: 9,
-        offset: 210,
     }
 
     marvelService = new MarvelService();
@@ -21,7 +19,7 @@ class CharList extends Component
     }
 
     updateChars = () => {
-        this.marvelService.getAllCharacters(this.limit, this.offset)
+        this.marvelService.getAllCharacters()
             .then(this.onCharactersLoaded)
             .catch(this.onError);
     }
@@ -40,11 +38,15 @@ class CharList extends Component
         });
     }
 
+    setCharId = (id) => {
+        this.props.setCharId(id);
+    }
+
     render() {
         const {characters, loading, error} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error) ? <Characters characters={characters}/> : null;
+        const content = !(loading || error) ? <Characters characters={characters} setCharId={this.setCharId} /> : null;
 
         return (
             <div className="char__list">
@@ -59,10 +61,13 @@ class CharList extends Component
     }
 }
 
-const Characters = ({characters}) => {
-    const charList = characters.map((character, id) => {
+const Characters = ({characters, setCharId}) => {
+    const charList = characters.map(character => {
         return (
-            <li className="char__item" key={id}>
+            <li className="char__item"
+                key={character.id}
+                onClick={() => setCharId(character.id)}
+            >
                 <img src={character.thumbnail} alt={character.thumbnail} style={character.imgStyle}/>
                 <div className="char__name">{character.name}</div>
             </li>

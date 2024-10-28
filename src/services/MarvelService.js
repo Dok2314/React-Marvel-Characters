@@ -34,12 +34,14 @@ class MarvelService
         const imgStyle = { 'objectFit': thumbnail.includes("image_not_available") ? 'contain' : 'cover' };
 
         return {
+            id: character.id,
             name: character.name,
             description: description,
             thumbnail: thumbnail,
             homepage: character.urls[0].url,
             wiki: character.urls[1].url,
-            imgStyle: imgStyle
+            imgStyle: imgStyle,
+            comics: character.comics.items,
         };
     }
 }

@@ -8,6 +8,14 @@ import decoration from '../../resources/img/vision.png';
 
 class App extends Component
 {
+    state = {
+        id: null
+    }
+
+    setCharId = (id) => {
+        this.setState(({id}));
+    }
+
     render() {
         return (
             <div className="app">
@@ -15,8 +23,8 @@ class App extends Component
                 <main>
                     <RandomChar/>
                     <div className="char__content">
-                        <CharList/>
-                        <CharInfo/>
+                        <CharList setCharId={this.setCharId} />
+                        <CharInfo id={this.state.id} />
                     </div>
                     <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>
