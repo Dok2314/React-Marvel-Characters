@@ -30,13 +30,17 @@ class MarvelService
                 : character.description
             : 'Description not available';
 
+        const thumbnail = `${character.thumbnail.path}.${character.thumbnail.extension}`;
+        const imgStyle = { 'objectFit': thumbnail.includes("image_not_available") ? 'contain' : 'cover' };
+
         return {
             name: character.name,
             description: description,
-            thumbnail: `${character.thumbnail.path}.${character.thumbnail.extension}`,
+            thumbnail: thumbnail,
             homepage: character.urls[0].url,
             wiki: character.urls[1].url,
-        }
+            imgStyle: imgStyle
+        };
     }
 }
 
